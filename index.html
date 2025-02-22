@@ -1,0 +1,152 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A&P Collateral Loans - Loan Application Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        label, input, select, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        canvas {
+            border: 1px solid black;
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>A&P Collateral Loans - Loan Application Form</h2>
+    <form id="loanForm">
+        <label>Name (as per National ID):</label>
+        <input type="text" name="name" id="name" required><label>Identification Type:</label>
+    <select name="idType" required>
+        <option value="ID">National ID</option>
+        <option value="Passport">Passport</option>
+        <option value="Other">Other</option>
+    </select>
+    
+    <label>ID Number:</label>
+    <input type="text" name="idNumber" required>
+    
+    <label>Upload Identification Document:</label>
+    <input type="file" name="idDocument" id="idDocument" accept="image/*,application/pdf" required>
+    
+    <label>Date of Birth:</label>
+    <input type="date" name="dob" required>
+    
+    <label>Phone Number:</label>
+    <input type="tel" name="phone" required>
+    
+    <label><strong>Collateral Details:</strong></label>
+    <textarea name="collateral" required></textarea>
+    
+    <label><strong>Upload Clear Image of Collateral:</strong></label>
+    <input type="file" name="collateralImage" accept="image/*" required>
+    
+    <label><strong>Collateral Conditions:</strong></label>
+    <p>The collateral should not be faulty, should be in good working condition, and must be owned by the applicant. The original purchase receipt is mandatory.</p>
+    
+    <label>Upload Item Image:</label>
+    <input type="file" name="itemImage" accept="image/*" required>
+    
+    <label>Upload Receipts and Relevant Documents:</label>
+    <input type="file" name="receipts" id="receipts" accept="image/*,application/pdf" multiple required>
+    
+    <label>Loan Amount:</label>
+    <input type="number" name="loanAmount" required>
+    
+    <label>Borrowing Date:</label>
+    <input type="date" name="borrowDate" required>
+    
+    <label>Borrowing Period (in weeks):</label>
+    <input type="number" name="borrowPeriod" required>
+    
+    <label>Location (Machakos Town):</label>
+    <select name="location" required>
+        <option value="Kathemboni">Kathemboni</option>
+        <option value="Machakos University Hostels">Machakos University Hostels</option>
+        <option value="Eastleigh">Eastleigh</option>
+        <option value="Katoloni">Katoloni</option>
+        <option value="Kathayoni">Kathayoni</option>
+        <option value="Mumbuni">Mumbuni</option>
+        <option value="Katumani">Katumani</option>
+        <option value="Mwanyani">Mwanyani</option>
+        <option value="Kiima Kimwe">Kiima Kimwe</option>
+        <option value="Mua Hills">Mua Hills</option>
+        <option value="Mutituni">Mutituni</option>
+        <option value="Mumbuni North">Mumbuni North</option>
+        <option value="Muvuti/Kiima-Kimwe">Muvuti/Kiima-Kimwe</option>
+        <option value="Machakos Centre">Machakos Centre</option>
+    </select>
+    
+    <label>Signature of Client:</label>
+    <canvas id="signaturePad"></canvas>
+    <button type="button" id="clearSignature">Clear Signature</button>
+    
+    <label>Live Selfie Verification:</label>
+    <video id="video" width="100%" autoplay></video>
+    <button type="button" id="captureSelfie">Capture Selfie</button>
+    <canvas id="selfieCanvas"></canvas>
+    
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    const canvas = document.getElementById("signaturePad");
+    const ctx = canvas.getContext("2d");
+    let drawing = false;
+
+    canvas.addEventListener("mousedown", () => drawing = true);
+    canvas.addEventListener("mouseup", () => drawing = false);
+    canvas.addEventListener("mousemove", (event) => {
+        if (!drawing) return;
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+    });
+
+    document.getElementById("clearSignature").addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    
+    const video = document.getElementById("video");
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(error => console.error("Camera access denied", error));
+    
+    document.getElementById("captureSelfie").addEventListener("click", () => {
+        const selfieCanvas = document.getElementById("selfieCanvas");
+        const selfieCtx = selfieCanvas.getContext("2d");
+        selfieCtx.drawImage(video, 0, 0, selfieCanvas.width, selfieCanvas.height);
+    });
+
+    document.getElementById("loanForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        alert("Your application has been submitted. We will review and contact you shortly.");
+    });
+</script>
+
+</body>
+</html>
